@@ -79,7 +79,7 @@ export class AuthController{
 
    @Put('/updateProfile/:id')
    async updateUser(@Param('id') id:number, @Body() postData:User, @Res() res:Response):Promise<any>{
-       if (!postData.fullname && !postData.username && !postData.password) {
+       if (!postData.fullname && !postData.username ) {
            return res.status(400).json({ error: 'Content is not empty' });
        } 
        try{
