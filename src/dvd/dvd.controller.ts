@@ -1,7 +1,8 @@
 import { DvdService } from "./dvd.service";
 import { Response } from 'express';
 import { Dvd } from "./dvd.model";
-import { Get, Body, Post, Param, Delete, Put, Controller, Res } from "@nestjs/common";
+import { Get, Body, Post, Param, Delete, Put, Controller, Res, UseGuards } from "@nestjs/common";
+import { JwtAuthGuard } from "src/auth/jwt/jwt-auth.guard";
 
 @Controller('api/dvd')
 export class DvdController{
@@ -9,6 +10,7 @@ export class DvdController{
     constructor(private readonly dvdService: DvdService){}
 
     @Get()
+    @UseGuards(JwtAuthGuard)
     async getAllDvds(@Res() res: Response): Promise<any> {
         try {
             const Dvd = await this.dvdService.getAllDvD();
@@ -19,6 +21,7 @@ export class DvdController{
     }
 
     @Post('/createNewDvd')
+    @UseGuards(JwtAuthGuard)
     async postDvd(@Body() postData: Dvd, @Res() res: Response): Promise<any> {
       
         if (!postData.title || !postData.img_url || !postData.description || !postData.status_id) {
@@ -34,6 +37,7 @@ export class DvdController{
     }
 
     @Get(':id')
+    @UseGuards(JwtAuthGuard)
     async getDvd(@Param('id') id:number, @Res() res: Response):Promise<any>{
         try {
             const dvd = await this.dvdService.getDvD(id);
@@ -47,7 +51,8 @@ export class DvdController{
         }
     }
 
-   @Delete(':id')
+   @Delete('/deleteDvd/:id')
+   @UseGuards(JwtAuthGuard)
    async deleteDvd(@Param('id') id:number, @Res() res:Response): Promise<any>{
         try{
             const dvd = await this.dvdService.deleteDvD(id);
@@ -61,7 +66,8 @@ export class DvdController{
         }
    }
 
-    @Put(':id')
+    @Put('/updateDvd/:id')
+    @UseGuards(JwtAuthGuard)
     async updateDvd(@Param('id') id:number, @Body() postData:Dvd, @Res() res:Response):Promise<any>{
         if (!postData.title && !postData.description && !postData.img_url) {
             return res.status(400).json({ error: 'Content is not empty' });
@@ -78,7 +84,8 @@ export class DvdController{
         }
     }
 
-    @Put('status/:id')
+    @Put('updateStatus/:id')
+    @UseGuards(JwtAuthGuard)
     async updateStatusDvd(@Param('id') id: number, @Body() postStatus: { status_id: number }, @Res() res: Response): Promise<any> {
         if (!postStatus.status_id) {
             return res.status(400).json({ error: 'Content is not empty' });

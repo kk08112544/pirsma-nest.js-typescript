@@ -4,6 +4,7 @@ import { User } from "./auth.model";
 import { Get, Body, Post, Param, Delete, Put, Controller, Res, UseGuards  } from "@nestjs/common";
 import { Request } from '@nestjs/common';
 import { LocalAuthGuard } from "./local/local-auth.guard";
+import { JwtAuthGuard } from "./jwt/jwt-auth.guard";
 
 @Controller('api/auth')
 export class AuthController{
@@ -11,6 +12,7 @@ export class AuthController{
     constructor(private readonly authService: AuthService){}
 
     @Get()
+    @UseGuards(JwtAuthGuard)
     async getAllUser(@Res() res: Response): Promise<any> {
         try {
             const User = await this.authService.getAllUser();
@@ -54,6 +56,7 @@ export class AuthController{
 
 
     @Get('/profile/:id')
+    @UseGuards(JwtAuthGuard)
     async getUser(@Param('id') id:number, @Res() res: Response):Promise<any>{
         try {
             const user = await this.authService.getUser(id);
@@ -64,6 +67,7 @@ export class AuthController{
     }
 
    @Delete('/deletUser/:id')
+   @UseGuards(JwtAuthGuard)
    async deleteUser(@Param('id') id:number, @Res() res:Response): Promise<any>{
         try{
             const user = await this.authService.deleteUser(id);
@@ -78,6 +82,7 @@ export class AuthController{
    }
 
    @Put('/updateProfile/:id')
+   @UseGuards(JwtAuthGuard)
    async updateUser(@Param('id') id:number, @Body() postData:User, @Res() res:Response):Promise<any>{
        if (!postData.fullname && !postData.username ) {
            return res.status(400).json({ error: 'Content is not empty' });
