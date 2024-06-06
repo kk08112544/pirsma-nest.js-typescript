@@ -73,7 +73,6 @@ export class AuthService {
             data: {
                 fullname: data.fullname,
                 username: data.username,
-                password: data.password,
             },
         });
     }

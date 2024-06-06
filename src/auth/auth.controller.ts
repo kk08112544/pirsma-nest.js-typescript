@@ -70,7 +70,7 @@ export class AuthController{
             if(user){
                 res.status(201).json({message:'Delete Successfully'})
             }else{
-                res.status(400).json({error:'DvD ID not found'});
+                res.status(400).json({error:'User ID not found'});
             }
         }catch(error){
             res.status(500).json({error:'Error message'});
@@ -87,7 +87,7 @@ export class AuthController{
            if (updatedUser) {
                res.status(201).json(updatedUser); // 201 status if update is successful
            } else {
-               res.status(400).json({ error: 'DvD Id is not found' }); // 400 status if book is not found
+               res.status(400).json({ error: 'User Id is not found' }); // 400 status if book is not found
            }
        }catch(error){
            res.status(500).json({ error: 'Error message' });
