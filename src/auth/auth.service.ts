@@ -39,22 +39,16 @@ export class AuthService {
 
 
     async createUser(data: User): Promise<any> {
-        const hashedPassword: string = await bcrypt.hash(data.password, 10); // 10 is the salt rounds for bcrypt
-      
-        // Type the result of the create operation
+        const hashedPassword: string = await bcrypt.hash(data.password, 10); 
         const createUser: User = await this.prisma.user.create({
           data: {
             ...data,
-            password: hashedPassword, // Use the hashed password instead of the original one
+            password: hashedPassword, 
           },
         });
-      
-        // Generate JWT token for the user
         const accessToken = this.jwtService.sign({ userId: createUser.id, username: createUser.username });
-       
-      
         return { data: createUser, accessToken };
-      }
+    }
 
     
   
