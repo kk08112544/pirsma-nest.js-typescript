@@ -11,7 +11,7 @@ export class AuthController{
 
     constructor(private readonly authService: AuthService){}
 
-    @Get()
+    @Get('getAlluser')
     @UseGuards(JwtAuthGuard)
     async getAllUser(@Res() res: Response): Promise<any> {
         try {
