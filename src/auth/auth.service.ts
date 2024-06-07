@@ -14,7 +14,13 @@ export class AuthService {
     constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
     async getAllUser(): Promise<any[]> { 
-        return this.prisma.user.findMany();
+        return this.prisma.user.findMany({
+            select: {
+              id: true,
+              fullname: true,
+              username: true
+            }
+          });
     }
 
    
@@ -32,15 +38,23 @@ export class AuthService {
     }
 
 
-    async createUser(data: User): Promise<User>{
-        const hashedPassword: string = await bcrypt.hash(data.password, 10); // 10 เป็นค่าความแข็งแรงของการ hash
-        return this.prisma.user.create({
-            data: {
-                ...data,
-                password: hashedPassword, // ใช้รหัสผ่านที่ถูก hash แทนที่รหัสผ่านเดิม
-            },
+    async createUser(data: User): Promise<any> {
+        const hashedPassword: string = await bcrypt.hash(data.password, 10); // 10 is the salt rounds for bcrypt
+      
+        // Type the result of the create operation
+        const createUser: User = await this.prisma.user.create({
+          data: {
+            ...data,
+            password: hashedPassword, // Use the hashed password instead of the original one
+          },
         });
-    }
+      
+        // Generate JWT token for the user
+        const accessToken = this.jwtService.sign({ userId: createUser.id, username: createUser.username });
+       
+      
+        return { data: createUser, accessToken };
+      }
 
     
   
