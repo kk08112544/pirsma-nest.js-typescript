@@ -49,9 +49,9 @@ export class AuthController{
 
     @Post('/login')
     @UseGuards(LocalAuthGuard)
-    async login(@Request() req:any) :Promise<any>{
-        return this.authService.login(req.user);
-
+    async login(@Request() req:any,  @Res() res: Response) :Promise<any>{
+        const loginResult = await this.authService.login(req.user);
+        return res.status(200).json(loginResult);
     }
 
 
