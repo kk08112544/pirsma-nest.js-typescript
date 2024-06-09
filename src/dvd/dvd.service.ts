@@ -18,6 +18,7 @@ export class DvdService {
                 title: true,
                 img_url: true,
                 description: true,
+                status_id: true,
                 status: {
                     select: {
                         status_name: true
@@ -36,6 +37,7 @@ export class DvdService {
               title: true,
               img_url: true,
               description: true,
+              status_id: true,
               status: {
                 select: {
                   status_name: true
