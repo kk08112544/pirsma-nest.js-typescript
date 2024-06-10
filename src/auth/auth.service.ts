@@ -29,6 +29,8 @@ export class AuthService {
           where: { username: username },
         });
       }
+
+ 
     
 
     async getUser(id: number): Promise<any> { 
